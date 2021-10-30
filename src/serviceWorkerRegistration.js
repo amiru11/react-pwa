@@ -14,7 +14,7 @@
 // Web-Push Public base64 to Unit // 구글 크롬에서는 base64 인코딩(문자열) 공용 키를 허용하지 않아서 urlBase64ToInt8Array()로 정의되어 있습니다.
 function urlBase64ToUint8Array(base64String) {
   var padding = "=".repeat((4 - (base64String.length % 4)) % 4);
-  var base64 = (base64String + padding).replace(/\-/g, "+").replace(/_/g, "/");
+  var base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
 
   var rawData = window.atob(base64);
   var outputArray = new Uint8Array(rawData.length);
