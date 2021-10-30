@@ -95,7 +95,7 @@ const firebaseApp = initializeApp(firebaseConfig);
 isSupported().then((result) => {
   if (result) {
     const messaging = getMessaging(firebaseApp);
-    console.log("messaging", firebaseApp, messaging);
+    console.log("messaging", messaging);
     onMessage(messaging, (payload) => {
       // 앱이 포그라운드 상태일 때,
       // Handle incoming messages. Called when:
@@ -116,7 +116,6 @@ isSupported().then((result) => {
       const notificationTitle = "Background Message Title";
       const notificationOptions = {
         body: "Background Message body.",
-        icon: "/logo512.png",
       };
 
       self.registration.showNotification(
