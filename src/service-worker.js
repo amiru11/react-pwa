@@ -87,32 +87,38 @@ const firebaseConfig = {
 // Initialize Firebase
 const firebaseApp = initializeApp(firebaseConfig);
 
-console.log("messaging", isSupported());
-// 앱이 포그라운드 상태일 때,
-// Handle incoming messages. Called when:
-// - a message is received while the app has focus
-// - the user clicks on an app notification created by a service worker
-//   `messaging.onBackgroundMessage` handler
-if (isSupported()) {
-  // Retrieve an instance of Firebase Messaging so that it can handle background messages.
-  const messaging = getMessaging();
-  onMessage(messaging, (payload) => {
-    console.log("Message received. ", payload);
-    // ...
-  });
+// messaging 객체가 지원하는지 판단하는 메서드 isSupported() -> promise 리턴해준다.
+isSupported().then((result) => {
+  if (result) {
+    console.log("messaging", result);
+    const messaging = getMessaging();
+    onMessage(messaging, (payload) => {
+      // 앱이 포그라운드 상태일 때,
+      // Handle incoming messages. Called when:
+      // - a message is received while the app has focus
+      // - the user clicks on an app notification created by a service worker
+      //   `messaging.onBackgroundMessage` handler
+      // Retrieve an instance of Firebase Messaging so that it can handle background messages.
+      console.log("Message received. ", payload);
+      // ...
+    });
 
-  onBackgroundMessage(messaging, (payload) => {
-    console.log(
-      "[firebase-messaging-sw.js] Received background message ",
-      payload
-    );
-    // Customize notification here
-    const notificationTitle = "Background Message Title";
-    const notificationOptions = {
-      body: "Background Message body.",
-      icon: "/logo512.png",
-    };
+    onBackgroundMessage(messaging, (payload) => {
+      console.log(
+        "[firebase-messaging-sw.js] Received background message ",
+        payload
+      );
+      // Customize notification here
+      const notificationTitle = "Background Message Title";
+      const notificationOptions = {
+        body: "Background Message body.",
+        icon: "/logo512.png",
+      };
 
-    self.registration.showNotification(notificationTitle, notificationOptions);
-  });
-}
+      self.registration.showNotification(
+        notificationTitle,
+        notificationOptions
+      );
+    });
+  }
+});
