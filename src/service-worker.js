@@ -87,15 +87,15 @@ const firebaseConfig = {
 // Initialize Firebase
 const firebaseApp = initializeApp(firebaseConfig);
 
-// Retrieve an instance of Firebase Messaging so that it can handle background messages.
-const messaging = getMessaging();
-console.log("messaging", messaging, isSupported());
+console.log("messaging", isSupported());
 // 앱이 포그라운드 상태일 때,
 // Handle incoming messages. Called when:
 // - a message is received while the app has focus
 // - the user clicks on an app notification created by a service worker
 //   `messaging.onBackgroundMessage` handler
 if (isSupported()) {
+  // Retrieve an instance of Firebase Messaging so that it can handle background messages.
+  const messaging = getMessaging();
   onMessage(messaging, (payload) => {
     console.log("Message received. ", payload);
     // ...
