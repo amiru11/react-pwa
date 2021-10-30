@@ -13,8 +13,8 @@ import { precacheAndRoute, createHandlerBoundToURL } from "workbox-precaching";
 import { registerRoute } from "workbox-routing";
 import { StaleWhileRevalidate } from "workbox-strategies";
 import { initializeApp } from "firebase/app";
-import { getMessaging } from "firebase/messaging";
-import { onMessage, onBackgroundMessage } from "firebase/messaging/sw";
+import { getMessaging, onMessage } from "firebase/messaging";
+import { onBackgroundMessage } from "firebase/messaging/sw";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_API_KEY,
