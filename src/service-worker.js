@@ -13,8 +13,12 @@ import { precacheAndRoute, createHandlerBoundToURL } from "workbox-precaching";
 import { registerRoute } from "workbox-routing";
 import { StaleWhileRevalidate } from "workbox-strategies";
 import { initializeApp } from "firebase/app";
-import { getMessaging, onMessage } from "firebase/messaging";
-import { onBackgroundMessage, isSupported } from "firebase/messaging/sw";
+import { onMessage } from "firebase/messaging";
+import {
+  getMessaging,
+  onBackgroundMessage,
+  isSupported,
+} from "firebase/messaging/sw";
 
 clientsClaim();
 
@@ -90,8 +94,8 @@ const firebaseApp = initializeApp(firebaseConfig);
 // messaging 객체가 지원하는지 판단하는 메서드 isSupported() -> promise 리턴해준다.
 isSupported().then((result) => {
   if (result) {
-    console.log("messaging", result);
-    const messaging = getMessaging();
+    const messaging = getMessaging(firebaseApp);
+    console.log("messaging", firebaseApp, messaging);
     onMessage(messaging, (payload) => {
       // 앱이 포그라운드 상태일 때,
       // Handle incoming messages. Called when:
