@@ -10,21 +10,6 @@
 // To learn more about the benefits of this model and instructions on how to
 // opt-in, read https://cra.link/PWA
 
-//
-// Web-Push Public base64 to Unit // 구글 크롬에서는 base64 인코딩(문자열) 공용 키를 허용하지 않아서 urlBase64ToInt8Array()로 정의되어 있습니다.
-function urlBase64ToUint8Array(base64String) {
-  var padding = "=".repeat((4 - (base64String.length % 4)) % 4);
-  var base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
-
-  var rawData = window.atob(base64);
-  var outputArray = new Uint8Array(rawData.length);
-
-  for (var i = 0; i < rawData.length; ++i) {
-    outputArray[i] = rawData.charCodeAt(i);
-  }
-  return outputArray;
-}
-
 const isLocalhost = Boolean(
   window.location.hostname === "localhost" ||
     // [::1] is the IPv6 localhost address.
@@ -108,29 +93,6 @@ function registerValidSW(swUrl, config) {
           }
         };
       };
-      // Service worker 안에서 푸시 서비스 등록
-      return registration.pushManager
-        .getSubscription()
-        .then(async (subscription) => {
-          console.log("subscription", subscription);
-          // 사용자가 이미 구독했을경우, 구독 객체를 반환하며 구독 파트로 이동합니다. 그렇지 않을 경우 새로운 구독을 초기화
-          if (subscription) {
-            return subscription;
-          }
-
-          const vapidPublicKey = "SOMETHING VAPID KEY";
-          const convertedVapidKey = urlBase64ToUint8Array(vapidPublicKey);
-
-          // pushManager로 특정 서버의 푸시를 구독하도록 만든다. -> Firebase가 될 것 같음
-          return registration.pushManager.subscribe({
-            userVisibleOnly: true,
-            applicationServerKey: convertedVapidKey,
-          });
-        });
-    })
-    .then((subscription) => {
-      // Service worker 안에서 푸시 서비스 구독 응답처리
-      console.log("push subscription", subscription);
     })
     .catch((error) => {
       console.error("Error during service worker registration:", error);
