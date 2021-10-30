@@ -14,7 +14,7 @@ import { registerRoute } from "workbox-routing";
 import { StaleWhileRevalidate } from "workbox-strategies";
 import { initializeApp } from "firebase/app";
 import { getMessaging, onMessage } from "firebase/messaging";
-import { onBackgroundMessage } from "firebase/messaging/sw";
+import { onBackgroundMessage, isSupported } from "firebase/messaging/sw";
 
 clientsClaim();
 
@@ -89,27 +89,30 @@ const firebaseApp = initializeApp(firebaseConfig);
 
 // Retrieve an instance of Firebase Messaging so that it can handle background messages.
 const messaging = getMessaging();
+console.log("messaging", messaging, isSupported());
 // 앱이 포그라운드 상태일 때,
 // Handle incoming messages. Called when:
 // - a message is received while the app has focus
 // - the user clicks on an app notification created by a service worker
 //   `messaging.onBackgroundMessage` handler
-onMessage(messaging, (payload) => {
-  console.log("Message received. ", payload);
-  // ...
-});
+if (isSupported()) {
+  onMessage(messaging, (payload) => {
+    console.log("Message received. ", payload);
+    // ...
+  });
 
-onBackgroundMessage(messaging, (payload) => {
-  console.log(
-    "[firebase-messaging-sw.js] Received background message ",
-    payload
-  );
-  // Customize notification here
-  const notificationTitle = "Background Message Title";
-  const notificationOptions = {
-    body: "Background Message body.",
-    icon: "/logo512.png",
-  };
+  onBackgroundMessage(messaging, (payload) => {
+    console.log(
+      "[firebase-messaging-sw.js] Received background message ",
+      payload
+    );
+    // Customize notification here
+    const notificationTitle = "Background Message Title";
+    const notificationOptions = {
+      body: "Background Message body.",
+      icon: "/logo512.png",
+    };
 
-  self.registration.showNotification(notificationTitle, notificationOptions);
-});
+    self.registration.showNotification(notificationTitle, notificationOptions);
+  });
+}
