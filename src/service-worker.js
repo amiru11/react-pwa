@@ -93,9 +93,10 @@ const firebaseApp = initializeApp(firebaseConfig);
 
 // messaging 객체가 지원하는지 판단하는 메서드 isSupported() -> promise 리턴해준다.
 isSupported().then((result) => {
+  console.log("isSupported():: ", result);
   if (result) {
     const messaging = getMessaging(firebaseApp);
-    console.log("messaging", messaging);
+    console.log("messaging:: ", messaging);
     onMessage(messaging, (payload) => {
       // 앱이 포그라운드 상태일 때,
       // Handle incoming messages. Called when:
